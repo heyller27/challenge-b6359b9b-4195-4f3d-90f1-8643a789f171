@@ -11,19 +11,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
            .csrf().disable()
            .authorizeRequests()
                .antMatchers("/api/payments").authenticated()
                .anyRequest().permitAll()
            .and()
-           .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+           .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
     }
 }
