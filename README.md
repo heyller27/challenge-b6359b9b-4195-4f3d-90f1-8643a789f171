@@ -120,3 +120,34 @@ Como desarrollador avanzado de backend en Java, tu tarea es fortalecer tu habili
 ---
 
 *Reto generado automaticamente por Challenge Generator - Pragma*
+
+## Entregables
+
+| Fase | Documento |
+|------|-----------|
+| Fase 2 — Mecanismos de autenticación (HTTP Basic + JWT) | [docs/autenticacion.md](docs/autenticacion.md) |
+| Fase 3 — Identificación de código a refactorizar | [docs/refactorizacion.md](docs/refactorizacion.md) |
+
+## Cómo ejecutar
+
+Requisitos: Java 17+, Maven y PostgreSQL con el esquema `reto_seguridad` (`CREATE SCHEMA reto_seguridad;`).
+
+1. Definir las variables de entorno (ver `.env.example`): `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`.
+2. Levantar la aplicación: `mvn spring-boot:run`. Hibernate crea las tablas `users` y `user_roles`.
+3. Crear un usuario (contraseña `Admin123*` en BCrypt):
+
+```sql
+INSERT INTO reto_seguridad.users (username, password)
+VALUES ('admin', '$2a$10$ONkrZZzxMElhZ9Ol6l4L9e65GPtc/cIiXt/Yo2l84IeOZxjcjq58S');
+
+INSERT INTO reto_seguridad.user_roles (user_id, role)
+SELECT id, 'ADMIN' FROM reto_seguridad.users WHERE username = 'admin';
+```
+
+4. Probar los dos mecanismos con los comandos de [docs/autenticacion.md](docs/autenticacion.md#cómo-probarlo).
+
+| Endpoint | Acceso |
+|----------|--------|
+| `POST /api/auth/authenticate` | Público — devuelve un JWT |
+| `GET /api/profile` | Basic o JWT — indica el mecanismo usado |
+| `/api/payments/**` | Basic o JWT |
