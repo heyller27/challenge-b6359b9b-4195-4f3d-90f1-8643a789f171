@@ -1,16 +1,18 @@
 package com.pragma.payment.application.service;
 
 import com.pragma.payment.domain.model.Payment;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class PaymentServiceTest {
-    @Autowired
     private PaymentService paymentService;
+
+    @BeforeEach
+    void setUp() {
+        paymentService = new PaymentServiceImpl();
+    }
 
     @Test
     public void testGetAllPayments() {
